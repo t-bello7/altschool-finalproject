@@ -3,10 +3,10 @@ name: Terraform Validation
 on:
   push:
     branches:
-      - main
+      - test
   pull_request:
     branches:
-      - main
+      - test
 
 jobs:
   terraform_validation:
