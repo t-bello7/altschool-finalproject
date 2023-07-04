@@ -1,5 +1,5 @@
+---
 name: Terraform Validation
-
 on:
   push:
     branches:
@@ -7,22 +7,17 @@ on:
   pull_request:
     branches:
       - test
-
 jobs:
   terraform_validation:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 4.46.0
-
       - name: Terraform Init
         run: terraform init
-
       - name: Terraform Validate
         run: terraform validate
