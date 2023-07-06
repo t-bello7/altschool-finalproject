@@ -1,0 +1,7 @@
+name: "My composite action"
+description: "Checks out the repository and does something"
+runs:
+  using: "composite"
+  steps:
+    - name: Run a composite action script
+      run: composite action script works
