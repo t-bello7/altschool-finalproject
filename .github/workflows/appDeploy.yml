@@ -18,8 +18,6 @@ on:
 
 # get EKS repo cluster name to container
 # apply maniest file on cluster
-
-
 jobs:
   deploy_app_on_EKS:
     runs-on: ubuntu-latest
@@ -31,19 +29,10 @@ jobs:
         aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
-    
-    # - name: Install Kubectl
-      # run: |
-      #          apk add --no-cache bind-tools docker gettext jq
-      #       apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community terraform
-      #       gcloud components install kubectl
-      #       wget https://github.com/garethr/kubeval/releases/download/0.7.3/kubeval-linux-amd64.tar.gz
-      #       tar xzvf kubeval-linux-amd64.tar.gz
-      #       chmod u+x kubeval
 
     - name: AWS Kubectl
       run: |
         aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-        ls
-        pwd
-        echo "Run kubectl command"
+        cd ./kubernetes_manifest
+        echo ls
+        echo pwd
