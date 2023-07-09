@@ -5,7 +5,7 @@ env:
   DOCKER_USER: ${{secrets.DOCKER_USER}}
   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
   REGISTRY: docker.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: tbello7/altschool-finalproject
 on:
   push:
     branches: ['test']
@@ -31,27 +31,28 @@ jobs:
         username: ${{secrets.DOCKER_USER}}
         password: ${{secrets.DOCKER_ACCESS_TOKEN}}
 
-    # - name: Extract metadata (tags, labels) for Docker  
-    #   id: meta
-    #   uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-    #   with:
-    #     images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+    - name: Extract metadata (tags, labels) for Docker  
+      id: meta
+      uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v4
       with:
         context: "./src/adservice"
         push: true
-        # tags: ${{ steps.meta.outputs.tags }}
-        tags: adservice:latest
-        # labels: ${{ steps.meta.outputs.labels }}
+        tags: ${{ steps.meta.outputs.tags }}
+        # tags: adservice:latest
+        labels: ${{ steps.meta.outputs.labels }}
     - name: Inspect Docker Image
       run: |
         docker image inspect adservice:latest
     # - name: Build docker image
     #   working-directory: ./src/adservice
     #   run: sudo docker build . -t microservice:adservice
-
-    # - name: Push to docker image
+#   docker tag local-image:tagname new-repo:tagname
+# docker push new-repo:tagname
+    # - name: Push to docker image  
     #   working-directory: ./src/adservice
     #   run: sudo docker image push microservice:adservice
