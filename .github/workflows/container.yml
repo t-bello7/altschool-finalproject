@@ -17,12 +17,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Docker login
-      run: docker login -u $DOCKER_USER -p $DOCKER_ACCESS_TOKEN
+      run: sudo docker login -u $DOCKER_USER -p $DOCKER_ACCESS_TOKEN
 
     - name: Build docker image
       working-directory: ./src/adservice
-      run: docker build . -t micorservice:adservice
+      run: sudo docker build . -t microservice:adservice
 
     - name: Push to docker image
       working-directory: ./src/adservice
-      run: docker image push microservice:adservice
+      run: sudo docker image push microservice:adservice
