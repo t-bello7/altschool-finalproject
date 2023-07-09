@@ -58,14 +58,3 @@ jobs:
     # - name: Inspect Docker Image
     #   run: |
     #     docker image inspect tbello7/altschool-${{ matrix.file-path }}
-
-
-        
-    # - name: Build docker image
-    #   working-directory: ./src/adservice
-    #   run: sudo docker build . -t microservice:adservice
-#   docker tag local-image:tagname new-repo:tagname
-# docker push new-repo:tagname
-    # - name: Push to docker image  
-    #   working-directory: ./src/adservice
-    #   run: sudo docker image push microservice:adservice
