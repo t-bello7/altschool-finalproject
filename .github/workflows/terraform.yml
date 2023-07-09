@@ -38,9 +38,6 @@ jobs:
           ./get_helm.sh
           helm repo add grafana https://grafana.github.io/helm-charts
           helm repo add stable https://charts.helm.sh/stable
-          helm repo update https://grafana.github.io/helm-charts
-          helm repo update https://charts.helm.sh/stable
-          
       
       - name: Terraform update modules
         run: terraform get -update
