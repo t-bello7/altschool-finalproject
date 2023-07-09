@@ -56,7 +56,7 @@ jobs:
       - name: Terraform Apply
         run: |
           terraform apply -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
-      # - name: Terraform Destroy
-      #   run: terraform destroy  
+      - name: Terraform Destroy
+        run: terraform destroy  
       # - name: Use Terraform output in github
       #   run: echo $(terraform output cluster_name)     

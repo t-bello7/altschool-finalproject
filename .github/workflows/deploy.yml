@@ -6,17 +6,17 @@ env:
 on:
   push:
     branches: ['test']
-    paths: ['./kubernetes_manifest/*', '.github/workflows/deploy.yml']
+    paths: ['./deploy_manifest/*', '.github/workflows/deploy.yml']
   pull_request:
     branches: ['test']
-    paths: ['./kubernetes_manifest/*', '.github/workflows/deploy.yml']
+    paths: ['./deploy_manifest/*', '.github/workflows/deploy.yml']
 
 jobs:
   deploy_app_on_EKS:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./kubernetes_manifest
+        working-directory: ./deploy_manifest
     name: Deploy app on amazon eks cluster
     steps:
     - name: Checkout code
@@ -30,7 +30,7 @@ jobs:
     - name: AWS Kubectl
       run: |
         aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-        kubectl create -f hipster_shop_deploy.yml
+       # kubectl create -f hipster_shop_deploy.yml
         kubectl get service
-  # kubectl delete deployment --all && kubectl delete service --all
+        kubectl delete deployment --all && kubectl delete service --all
 
