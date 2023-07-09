@@ -30,6 +30,10 @@ jobs:
           aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Terraform update modules
+        run: terraform get -update
+
       - name: Terraform init, format and validate
         run: |
           echo "** Running Terraform Init **"
@@ -42,9 +46,6 @@ jobs:
           echo " Running Terraform Validate"
           terraform validate
           
-      - name: Terraform update modules
-        run: terraform get -update
-
       - name: Terraform plan
         run: | 
           echo "Running Terraform Plan"
