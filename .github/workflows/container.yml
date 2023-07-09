@@ -1,4 +1,7 @@
 name: Terraform Validation
+env:
+  DOCKER_ACCESS_TOKEN: ${{secrets.DOCKER_ACCESS_TOKEN}}
+  DOCKER_USER: ${{secrets.DOCKER_USER}} 
 on:
   push:
     branches:
@@ -8,13 +11,17 @@ on:
       - [ $default-branch ]
 
 jobs:
-  push-container:
+  build-image:
     runs-on: ubuntu-latest
-    - name: Test if it gets template
-      runs: echo "works"
-    # - name: Dockerize application
-    # - runs: docker build
+    steps:
+    - uses: actions/checkout@v2
+    - name: Docker login
+      run: docker login -u $DOCKER_USER -p $DOCKER_ACCESS_TOKEN
 
-    # - name: Push Docker to docker hub
-    #   runs: docker push
+    - name: Build docker image
+      working_directory: ./src/adservice
+      run: docker build . -t micorservice:adservice
 
+    - name: Push to docker image
+      working_directory: ./src/adservice
+      run: docker image push microservice:adservice
