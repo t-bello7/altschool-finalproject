@@ -17,7 +17,7 @@ jobs:
   build-image:
     strategy:
       matrix:
-        file-path: [adservice, frontend]
+        file-path: [adservice, frontend, cartservice, checkoutservice, currencyservice, emailservice, loadgenerator, paymentservice, productcatalogservice, recommendationservice, shippingservice]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repo
@@ -39,9 +39,19 @@ jobs:
         images: ${{ env.REGISTRY }}/${{ env.DOCKER_USER }}/altschool-${{ matrix.file-path }}
 
     - name: Build and push Docker image
+      if: matrix.file-path != 'cartservice'
       uses: docker/build-push-action@v4
       with:
         context: ./src/${{ matrix.file-path }}
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+    
+    - name: Build and push docker image for cartservice
+      if: matrix.file-path == 'cartservice'
+      uses: docker/build-push-action@v4
+      with:
+        context: ./src/${{ matrix.file-path }}/src
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
