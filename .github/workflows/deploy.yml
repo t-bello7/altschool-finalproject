@@ -5,10 +5,11 @@ env:
   AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
 on:
   push:
-    branches:
-      - test
+    branches: ['test']
+    paths: ['./kubernetes_manifest/*', '.github/workflows/deploy.yml']
   pull_request:
     branches: ['test']
+    paths: ['./kubernetes_manifest/*', '.github/workflows/deploy.yml']
 
 jobs:
   deploy_app_on_EKS:
@@ -26,27 +27,9 @@ jobs:
         aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
-        
-    # - name: Login to Amazon ECR
-    #   id: login-ecr
-    #   uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Install and configure kubectl
-      run: |
-        VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
-        curl https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl \
-            --progress-bar \
-            --location \
-            --remote-name
-        chmod +x kubectl
-        sudo mv kubectl /usr/local/bin/
-
     - name: AWS Kubectl
       run: |
         aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-        kubectl get service
         kubectl create -f hipster_shop_deploy.yml
-        echo $(terraform output)
-        ls
-        pwd
+        kubectl get service
 

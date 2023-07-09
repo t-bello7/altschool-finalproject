@@ -12,7 +12,7 @@ on:
       - test
   pull_request:
     branches: ['test']
-    # paths: ['./terraform/*']
+    paths: ['./terraform/*']
 jobs:
   terraform_validation:
     runs-on: ubuntu-latest
@@ -22,7 +22,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -30,7 +29,6 @@ jobs:
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
           terraform_wrapper: false
-
       - name: Install helm
         run: |
           curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
@@ -38,10 +36,8 @@ jobs:
           ./get_helm.sh
           helm repo add grafana https://grafana.github.io/helm-charts
           helm repo add stable https://charts.helm.sh/stable
-      
       - name: Terraform update modules
         run: terraform get -update
-
       - name: Terraform init, format and validate
         run: |
           echo "** Running Terraform Init **"
@@ -53,15 +49,12 @@ jobs:
           
           echo " Running Terraform Validate"
           terraform validate
-          
       - name: Terraform plan
         run: | 
           echo "Running Terraform Plan"
           terraform plan -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
-
       - name: Terraform Apply
         run: |
           terraform apply -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'    
-
       - name: Use Terraform output in github
         run: echo $(terraform output cluster_name)     
