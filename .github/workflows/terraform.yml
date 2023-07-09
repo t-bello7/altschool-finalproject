@@ -49,5 +49,5 @@ jobs:
       - name: Terraform plan
         run: | 
           echo "Running Terraform Plan"
-          terraform plan
+          terraform plan --auto-approve
           
