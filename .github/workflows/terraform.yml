@@ -30,6 +30,17 @@ jobs:
           aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
+          helm repo add grafana https://grafana.github.io/helm-charts
+          helm repo add stable https://charts.helm.sh/stable
+          helm repo update https://grafana.github.io/helm-charts
+          helm repo update https://charts.helm.sh/stable
+          
       
       - name: Terraform update modules
         run: terraform get -update
