@@ -5,8 +5,8 @@ on:
     branches:
       - test
   pull_request:
-    branches:
-      - test
+    branches: ['test']
+    paths: ['./terraform/*']
 jobs:
   terraform_validation:
     runs-on: ubuntu-latest
