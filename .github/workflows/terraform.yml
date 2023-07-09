@@ -1,4 +1,3 @@
----
 name: Terraform Validation
 env:
   AWS_BUCKET_KEY: ${{ secrets.AWS_BUCKET_KEY }}
@@ -13,7 +12,7 @@ on:
       - test
   pull_request:
     branches: ['test']
-    paths: ['./terraform/*']
+    # paths: ['./terraform/*']
 jobs:
   terraform_validation:
     runs-on: ubuntu-latest
@@ -30,6 +29,7 @@ jobs:
           aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+          terraform_wrapper: false
 
       - name: Install helm
         run: |
@@ -61,4 +61,7 @@ jobs:
 
       - name: Terraform Apply
         run: |
-          terraform apply -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'         
+          terraform apply -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'    
+
+      - name: Use Terraform output in github
+        run: echo $(terraform output cluster_name)     

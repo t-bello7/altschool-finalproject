@@ -1,4 +1,3 @@
----
 name: Container Deployment
 env:
   DOCKER_ACCESS_TOKEN: ${{secrets.DOCKER_ACCESS_TOKEN}}
@@ -19,6 +18,9 @@ jobs:
       matrix:
         file-path: [adservice, frontend, cartservice, checkoutservice, currencyservice, emailservice, loadgenerator, paymentservice, productcatalogservice, recommendationservice, shippingservice]
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
@@ -42,7 +44,7 @@ jobs:
       if: matrix.file-path != 'cartservice'
       uses: docker/build-push-action@v4
       with:
-        context: ./src/${{ matrix.file-path }}
+        context: ./${{ matrix.file-path }}
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
@@ -51,7 +53,7 @@ jobs:
       if: matrix.file-path == 'cartservice'
       uses: docker/build-push-action@v4
       with:
-        context: ./src/${{ matrix.file-path }}/src
+        context: ./${{ matrix.file-path }}/src
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}

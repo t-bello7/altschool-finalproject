@@ -1,0 +1,50 @@
+name: Deploy App on Cluster
+env:
+  AWS_REGION: ${{secrets.AWS_REGION}}
+  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+  AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+on:
+  push:
+    branches:
+      - test
+  pull_request:
+    branches: ['test']
+
+jobs:
+  deploy_app_on_EKS:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./kubernetes_manifest
+    name: Deploy app on amazon eks cluster
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+        
+    # - name: Login to Amazon ECR
+    #   id: login-ecr
+    #   uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Install and configure kubectl
+      run: |
+        VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+        curl https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl \
+            --progress-bar \
+            --location \
+            --remote-name
+        chmod +x kubectl
+        sudo mv kubectl /usr/local/bin/
+
+    - name: AWS Kubectl
+      run: |
+        kubectl get service
+        echo $(terraform output)
+        ls
+        pwd
+
