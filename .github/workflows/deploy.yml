@@ -43,7 +43,9 @@ jobs:
 
     - name: AWS Kubectl
       run: |
+        aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
         kubectl get service
+        kubectl create -f hipster_shop_deploy.yml
         echo $(terraform output)
         ls
         pwd
