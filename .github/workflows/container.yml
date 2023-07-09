@@ -1,20 +1,71 @@
-name: Terraform Validation
+---
+name: Container Deployment
+env:
+  DOCKER_ACCESS_TOKEN: ${{secrets.DOCKER_ACCESS_TOKEN}}
+  DOCKER_USER: ${{secrets.DOCKER_USER}}
+  DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+  REGISTRY: docker.io
 on:
   push:
-    branches:
-      - [ $default-branch ]
+    branches: ['test']
+    # paths: ['./src/*']
   pull_request:
-    branches:
-      - [ $default-branch ]
+    branches: ['test']
+    # paths: ['./src/*']
 
 jobs:
-  push-container:
+  build-image:
+    strategy:
+      matrix:
+        file-path: [adservice, frontend, cartservice, checkoutservice, currencyservice, emailservice, loadgenerator, paymentservice, productcatalogservice, recommendationservice, shippingservice]
     runs-on: ubuntu-latest
-    - name: Test if it gets template
-      runs: echo "works"
-    # - name: Dockerize application
-    # - runs: docker build
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
 
-    # - name: Push Docker to docker hub
-    #   runs: docker push
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
+    - name: Docker login
+      uses: docker/login-action@v2
+      with:
+        username: ${{secrets.DOCKER_USER}}
+        password: ${{secrets.DOCKER_ACCESS_TOKEN}}
+
+    - name: Extract metadata (tags, labels) for Docker  
+      id: meta
+      uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.DOCKER_USER }}/altschool-${{ matrix.file-path }}
+
+    - name: Build and push Docker image
+      if: matrix.file-path != 'cartservice'
+      uses: docker/build-push-action@v4
+      with:
+        context: ./src/${{ matrix.file-path }}
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+    
+    - name: Build and push docker image for cartservice
+      if: matrix.file-path == 'cartservice'
+      uses: docker/build-push-action@v4
+      with:
+        context: ./src/${{ matrix.file-path }}/src
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+    # - name: Inspect Docker Image
+    #   run: |
+    #     docker image inspect tbello7/altschool-${{ matrix.file-path }}
+
+
+        
+    # - name: Build docker image
+    #   working-directory: ./src/adservice
+    #   run: sudo docker build . -t microservice:adservice
+#   docker tag local-image:tagname new-repo:tagname
+# docker push new-repo:tagname
+    # - name: Push to docker image  
+    #   working-directory: ./src/adservice
+    #   run: sudo docker image push microservice:adservice
