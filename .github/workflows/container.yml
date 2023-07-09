@@ -1,14 +1,15 @@
-name: Terraform Validation
+---
+name: Container Deployment
 env:
   DOCKER_ACCESS_TOKEN: ${{secrets.DOCKER_ACCESS_TOKEN}}
   DOCKER_USER: ${{secrets.DOCKER_USER}} 
 on:
   push:
     branches:
-      - [ $default-branch ]
+      - test
   pull_request:
     branches:
-      - [ $default-branch ]
+      - test
 
 jobs:
   build-image:
@@ -19,9 +20,9 @@ jobs:
       run: docker login -u $DOCKER_USER -p $DOCKER_ACCESS_TOKEN
 
     - name: Build docker image
-      working_directory: ./src/adservice
+      working-directory: ./src/adservice
       run: docker build . -t micorservice:adservice
 
     - name: Push to docker image
-      working_directory: ./src/adservice
+      working-directory: ./src/adservice
       run: docker image push microservice:adservice
