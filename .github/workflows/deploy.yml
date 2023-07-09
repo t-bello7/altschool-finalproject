@@ -32,4 +32,5 @@ jobs:
         aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
         kubectl create -f hipster_shop_deploy.yml
         kubectl get service
+  # kubectl delete deployment --all && kubectl delete service --all
 

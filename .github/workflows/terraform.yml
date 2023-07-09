@@ -8,11 +8,11 @@ env:
 
 on:
   push:
-    branches:
-      - test
+    branches: ['test']
+    paths: ['./terraform/*','.github/workflows/terraform.yml']
   pull_request:
     branches: ['test']
-    paths: ['./terraform/*']
+    paths: ['./terraform/*','.github/workflows/terraform.yml']
 jobs:
   terraform_validation:
     runs-on: ubuntu-latest
@@ -55,6 +55,8 @@ jobs:
           terraform plan -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
       - name: Terraform Apply
         run: |
-          terraform apply -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'    
-      - name: Use Terraform output in github
-        run: echo $(terraform output cluster_name)     
+          terraform apply -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
+      # - name: Terraform Destroy
+      #   run: terraform destroy  
+      # - name: Use Terraform output in github
+      #   run: echo $(terraform output cluster_name)     
