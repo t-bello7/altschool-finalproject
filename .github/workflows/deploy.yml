@@ -14,9 +14,6 @@ on:
 jobs:
   deploy_app_on_EKS:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./deploy_manifest
     name: Deploy app on amazon eks cluster
     steps:
     - name: Checkout code
@@ -27,11 +24,17 @@ jobs:
         aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
-    - name: AWS Kubectl
+    - name: Deploy Hipster Shop 
+      working-directory: ./deploy_manifest
       run: |
         aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
         kubectl create -f ingress.yml
-    
+    - name: Deploy Monitoring Yaml
+      working-directory: ./monitoring_manifest
+      run: |
+        aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+        kubectl create -f *     
+
     # kubectl create -f hipster_shop_deploy.yml
     # - name: AWS Kubectl
     #   run: |
