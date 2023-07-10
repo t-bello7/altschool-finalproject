@@ -6,10 +6,10 @@ env:
 on:
   push:
     branches: ['test']
-    # paths: ['./deploy_manifest/*', '.github/workflows/deploy.yml']
+    paths: ['./deploy_manifest/*', '.github/workflows/deploy.yml']
   pull_request:
     branches: ['test']
-    # paths: ['./deploy_manifest/*', '.github/workflows/deploy.yml']
+    paths: ['./deploy_manifest/*', '.github/workflows/deploy.yml']
 
 jobs:
   deploy_app_on_EKS:
@@ -25,22 +25,22 @@ jobs:
         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
   
-    - name: Deploy Monitoring Yaml
-      run: |
-        aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-        kubectl apply -f monitoring_manifest  
-
-    - name: Deploy Hipster Shop 
-      working-directory: ./deploy_manifest
-      run: |
-        aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-        kubectl apply -f hipster_shop_deploy.yml
-        kubectl apply -f ingress.yml
-
-   
-    # - name: AWS Kubectl
+    # - name: Deploy Monitoring Yaml
     #   run: |
     #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-    #     kubectl get service
-    #     kubectl delete deployment --all && kubectl delete service --all
+    #     kubectl apply -f monitoring_manifest  
+
+    # - name: Deploy Hipster Shop 
+    #   working-directory: ./deploy_manifest
+    #   run: |
+    #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+    #     kubectl apply -f hipster_shop_deploy.yml
+    #     kubectl apply -f ingress.yml
+
+   
+    # - name: DELETE Monitoring and hipster namespace
+    #   run: |
+    #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+    #     kubectl delete namespace monitoring
+    #     kubectl delete namespace hipster-shop
 
