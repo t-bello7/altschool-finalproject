@@ -1,0 +1,36 @@
+name: Deploy App on Cluster
+env:
+  AWS_REGION: ${{secrets.AWS_REGION}}
+  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+  AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+on:
+  push:
+    branches: ['test']
+    paths: ['./deploy_manifest/*', '.github/workflows/deploy.yml']
+  pull_request:
+    branches: ['test']
+    paths: ['./deploy_manifest/*', '.github/workflows/deploy.yml']
+
+jobs:
+  deploy_app_on_EKS:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./deploy_manifest
+    name: Deploy app on amazon eks cluster
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    - name: AWS Kubectl
+      run: |
+        aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+       # kubectl create -f hipster_shop_deploy.yml
+        kubectl get service
+        kubectl delete deployment --all && kubectl delete service --all
+
