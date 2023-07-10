@@ -26,17 +26,16 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
   
     - name: Deploy Monitoring Yaml
-      working-directory: ./monitoring_manifest
       run: |
         aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-        kubectl create -f *     
+        kubectl apply -f monitoring_manifest  
 
     - name: Deploy Hipster Shop 
       working-directory: ./deploy_manifest
       run: |
         aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-        kubectl create -f hipster_shop_deploy.yml
-        kubectl create -f ingress.yml
+        kubectl apply -f hipster_shop_deploy.yml
+        kubectl apply -f ingress.yml
 
    
     # - name: AWS Kubectl
