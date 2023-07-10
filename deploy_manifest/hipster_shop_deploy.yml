@@ -13,6 +13,11 @@
 # limitations under the License.
 
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hipster-shop
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
