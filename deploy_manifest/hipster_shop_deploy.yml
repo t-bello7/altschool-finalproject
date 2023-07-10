@@ -76,6 +76,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: emailservice
+  namespace: hipster-shop
 spec:
   type: ClusterIP
   selector:
@@ -151,7 +152,6 @@ kind: Service
 metadata:
   name: checkoutservice
   namespace: hipster-shop
-
 spec:
   type: ClusterIP
   selector:
@@ -221,6 +221,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: recommendationservice
+  namespace: hipster-shop
 spec:
   type: ClusterIP
   selector:
@@ -314,33 +315,35 @@ spec:
             limits:
               cpu: 200m
               memory: 128Mi
-              #---
-              #apiVersion: v1
-              #kind: Service
-              #metadata:
-              # name: frontend
-              #spec:
-              #type: ClusterIP
-              #selector:
-              #app: frontend
-              #ports:
-              #- name: http
-              #port: 80
-              #targetPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-external
+  name: frontend
+  namespace: hipster-shop
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: frontend
   ports:
   - name: http
     port: 80
     targetPort: 8080
----
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: frontend-external
+#   namespace: hipster-shop
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: frontend
+#   ports:
+#   - name: http
+#     port: 80
+#     targetPort: 8080
+# ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -397,6 +400,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: paymentservice
+  namespace: hipster-shop
 spec:
   type: ClusterIP
   selector:
@@ -462,6 +466,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: productcatalogservice
+  namespace: hipster-shop
 spec:
   type: ClusterIP
   selector:
@@ -528,6 +533,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cartservice
+  namespace: hipster-shop
 spec:
   type: ClusterIP
   selector:
@@ -665,6 +671,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: currencyservice
+  namespace: hipster-shop
 spec:
   type: ClusterIP
   selector:
@@ -730,6 +737,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: shippingservice
+  namespace: hipster-shop
 spec:
   type: ClusterIP
   selector:
@@ -796,6 +804,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: redis-cart
+  namespace: hipster-shop
 spec:
   type: ClusterIP
   selector:
@@ -863,6 +872,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: adservice
+  namespace: hipster-shop
 spec:
   type: ClusterIP
   selector:
