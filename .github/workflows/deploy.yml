@@ -30,8 +30,8 @@ jobs:
     - name: AWS Kubectl
       run: |
         aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-        kubectl create -f hipster_shop_deploy.yml
-
+      # kubectl create -f hipster_shop_deploy.yml
+        kubectl create -f ingress.yml
     # - name: AWS Kubectl
     #   run: |
     #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
