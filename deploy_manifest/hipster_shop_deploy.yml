@@ -17,6 +17,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: emailservice
+  namespace: hipster-shop
 spec:
   selector:
     matchLabels:
@@ -83,6 +84,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: checkoutservice
+  namespace: hipster-shop
 spec:
   selector:
     matchLabels:
@@ -143,6 +145,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: checkoutservice
+  namespace: hipster-shop
+
 spec:
   type: ClusterIP
   selector:
@@ -156,6 +160,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: recommendationservice
+  namespace: hipster-shop
 spec:
   selector:
     matchLabels:
@@ -224,6 +229,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
+  namespace: hipster-shop
 spec:
   selector:
     matchLabels:
@@ -334,6 +340,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: paymentservice
+  namespace: hipster-shop
 spec:
   selector:
     matchLabels:
@@ -398,6 +405,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: productcatalogservice
+  namespace: hipster-shop
 spec:
   selector:
     matchLabels:
@@ -462,6 +470,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cartservice
+  namespace: hipster-shop
 spec:
   selector:
     matchLabels:
@@ -527,6 +536,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: loadgenerator
+  namespace: hipster-shop
 spec:
   selector:
     matchLabels:
@@ -597,6 +607,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: currencyservice
+  namespace: hipster-shop
 spec:
   selector:
     matchLabels:
@@ -662,6 +673,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: shippingservice
+  namespace: hipster-shop  
 spec:
   selector:
     matchLabels:
@@ -726,6 +738,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis-cart
+  namespace: hipster-shop
 spec:
   selector:
     matchLabels:
@@ -791,6 +804,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: adservice
+  namespace: hipster-shop
 spec:
   selector:
     matchLabels:
