@@ -321,7 +321,8 @@ metadata:
   name: frontend
   namespace: hipster-shop
 spec:
-  type: ClusterIP
+  # type: ClusterIP
+  type: NodePort
   selector:
     app: frontend
   ports:

@@ -9,10 +9,10 @@ env:
 on:
   push:
     branches: ['test']
-    # paths: ['./terraform/*','.github/workflows/terraform.yml']
+    paths: ['./terraform/*','.github/workflows/terraform.yml']
   pull_request:
     branches: ['test']
-    # paths: ['./terraform/*','.github/workflows/terraform.yml']
+    paths: ['./terraform/*','.github/workflows/terraform.yml']
 jobs:
   terraform_validation:
     runs-on: ubuntu-latest
