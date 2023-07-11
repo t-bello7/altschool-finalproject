@@ -14,9 +14,6 @@ on:
 jobs:
   deploy_app_on_EKS:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./deploy_manifest
     name: Deploy app on amazon eks cluster
     steps:
     - name: Checkout code
@@ -27,10 +24,23 @@ jobs:
         aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
-    - name: AWS Kubectl
-      run: |
-        aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-       # kubectl create -f hipster_shop_deploy.yml
-        kubectl get service
-        kubectl delete deployment --all && kubectl delete service --all
+  
+    # - name: Deploy Monitoring Yaml
+    #   run: |
+    #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+    #     kubectl apply -f monitoring_manifest  
+
+    # - name: Deploy Hipster Shop 
+    #   working-directory: ./deploy_manifest
+    #   run: |
+    #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+    #     kubectl apply -f hipster_shop_deploy.yml
+    #     kubectl apply -f ingress.yml
+
+   
+    # - name: DELETE Monitoring and hipster namespace
+    #   run: |
+    #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+    #     kubectl delete namespace monitoring
+    #     kubectl delete namespace hipster-shop
 
