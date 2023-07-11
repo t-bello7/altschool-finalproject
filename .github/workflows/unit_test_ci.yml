@@ -3,10 +3,10 @@ name: unit test ci
 on:
   push:
     branches: ['test']
-    paths: ['./src/*']
+    # paths: ['./src/*']
   pull_request:
     branches: ['test']
-    paths: ['./src/*']
+    # paths: ['./src/*']
 
 jobs:
   unit_test:
