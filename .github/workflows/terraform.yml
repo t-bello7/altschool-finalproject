@@ -49,14 +49,55 @@ jobs:
           
           echo " Running Terraform Validate"
           terraform validate
-      # - name: Terraform plan
-      #   run: | 
-      #     echo "Running Terraform Plan"
-      #     terraform plan -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
-      # - name: Terraform Apply
+      - name: Terraform plan
+        run: | 
+          echo "Running Terraform Plan"
+          terraform plan -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
+
+
+  eks_setup:
+    needs: terraform_validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          
+      - name: Install Ngnix Controller
+        run: |
+          aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+          helm repo add nginx-stable https://helm.nginx.com/stable
+          helm repo update
+          helm upgrade --install ingress-nginx ingress-nginx \
+             --repo https://kubernetes.github.io/ingress-nginx \
+             --namespace ingress-nginx --create-namespace
+          kubectl get services -n ingress-nginx
+
+      # - name: Deploy Monitoring Yaml
       #   run: |
-      #     terraform apply -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
-      # - name: Use Terraform output in github
+      #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+      #     kubectl apply -f monitoring_manifest
+
+      # - name: Deploy Hipster Shop 
+      #   working-directory: ./deploy_manifest
+      #   run: |
+      #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+      #     kubectl apply -f hipster_shop_deploy.yml
+      #     kubectl apply -f ingress.yml
+
+    # - name: DELETE Monitoring and hipster namespace
+    #   run: |
+    #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+    #     kubectl delete namespace monitoring
+    #     kubectl delete namespace hipster-shop
+
+    # - name: Terraform Destroy
+    #   run: terraform destroy -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
+    # - name: Use Terraform output in github
       #   run: echo $(terraform output cluster_name)     
