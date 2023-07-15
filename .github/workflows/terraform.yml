@@ -56,12 +56,12 @@ jobs:
       - name: Terraform Apply
         run: |
           terraform apply -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
-
-
   eks_setup:
     needs: terraform_validation
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -80,61 +80,20 @@ jobs:
              --namespace ingress-nginx --create-namespace
           kubectl get services -n ingress-nginx
 
-      # - name: Deploy Monitoring Yaml
-      #   run: |
-      #     output=$(terraform output cluster_name)
-      #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-      #     kubectl apply -f monitoring_manifest
-
       - name: Deploy Hipster Shop 
         working-directory: ./deploy_manifest
         run: |
           output=$(terraform output cluster_name)
           aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
           kubectl apply -f hipster_shop_deploy.yml
-          kubectl apply -f---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: monitoring-ingress
-#   namespace: monitoring
-#   annotations:
-#      kubernetes.io/ingress.className: "nginx"
-# spec:
-#   ingressClassName: nginx
-#   rules:
-#     - host: "stors.tbello.bio"
-#       http:
-#         paths:
-#           - path: /monitoring
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: prometheus
-#                 port:
-#                   number: 9090
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: monitoring-ingress
-#   namespace: monitoring
-#   annotations:
-#      kubernetes.io/ingress.className: "nginx"
-# spec:
-#   ingressClassName: nginx
-#   rules:
-#     - host: "stors.tbello.bio"
-#       http:
-#         paths:
-#           - path: /grafana
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: grafana
-#                 port:
-#                   number: 3000
- ingress.yml
+          kubectl apply -f ingress.yml
+
+
+      # - name: Deploy Monitoring Yaml
+      #   run: |
+      #     output=$(terraform output cluster_name)
+      #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+      #     kubectl apply -f monitoring_manifest
 
     # - name: DELETE Monitoring and hipster namespace
     #   run: |
