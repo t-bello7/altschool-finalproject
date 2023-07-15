@@ -3,7 +3,6 @@ aws_access_key="${AWS_ACCESS_KEY}"
 region="${AWS_BUCKET_NAME}"
 
 
-
 /// Backend config
 key={AWS_BUCKET_KEY} // any name
 bucket={altschool-bucket} // created on aws
