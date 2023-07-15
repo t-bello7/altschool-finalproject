@@ -1,0 +1,56 @@
+name: unit test ci
+
+on:
+  push:
+    branches: ['test']
+    # paths: ['./src/*']
+  pull_request:
+    branches: ['test']
+    # paths: ['./src/*']
+
+jobs:
+  unit_test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./src
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup dotnet test
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: dotnet Test
+        timeout-minutes: 10
+        run: |
+          dotnet restore
+          dotnet build --configuration Release --no-restore
+          dotnet test --no-restore --verbosity normal
+        working-directory: ./src/cartservice/tests
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.19'
+
+      - name: go test
+        run: |
+          go build -v ./...
+          go test
+        working-directory: ./src/shippingservice
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.19'
+
+      - name: go test
+        run: |
+          go build -v ./...
+          go test
+        working-directory: ./src/productcatalogservice
