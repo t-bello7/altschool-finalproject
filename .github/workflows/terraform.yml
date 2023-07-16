@@ -88,7 +88,16 @@ jobs:
             --namespace ingress-nginx --create-namespace \
             --set controller.metrics.enabled=true --timeout 10m30s
           kubectl get services -n ingress-nginx
+      
+      - name: Install Cert Manager
+        run: |
+          aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+          helm upgrade -i cert-manager jetstack/cert-manager \
+            --namespace cert-manager --create-namespace \
+            --version v1.11.0 \
+            --set installCRDs=true
 
+   
       - name: Deploy Monitoring Yaml
         run: |
           output=$(terraform output cluster_name)
@@ -100,10 +109,9 @@ jobs:
         run: |
           output=$(terraform output cluster_name)
           aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+          kubectl apply -f cert_issue.yaml
           kubectl apply -f hipster_shop_deploy.yml
           kubectl apply -f ingress.yml
-
-
 
 
     # - name: DELETE Monitoring and hipster namespace
