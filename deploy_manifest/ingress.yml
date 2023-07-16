@@ -5,13 +5,7 @@ metadata:
   name: hipster-ingress
   namespace: hipster-shop
   annotations:
-    # kubernetes.io/ingress.className: "nginx"
-    # Core Ingress Settings  
     kubernetes.io/ingress.class: nginx
-    # alb.ingress.kubernetes.io/scheme: internet-facing
-    # alb.ingress.kubernetes.io/target-type: instance
-    ## SSL Settings
-    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
 spec:
   # ingressClassName: nginx
   rules:
@@ -25,45 +19,43 @@ spec:
                 name: frontend-service
                 port:
                   number: 80
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: monitoring-ingress
-#   namespace: monitoring
-#   annotations:
-#      kubernetes.io/ingress.className: "nginx"
-# spec:
-#   ingressClassName: nginx
-#   rules:
-#     - host: "stors.tbello.bio"
-#       http:
-#         paths:
-#           - path: /monitoring
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: prometheus
-#                 port:
-#                   number: 9090
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: monitoring-ingress
-#   namespace: monitoring
-#   annotations:
-#      kubernetes.io/ingress.className: "nginx"
-# spec:
-#   ingressClassName: nginx
-#   rules:
-#     - host: "stors.tbello.bio"
-#       http:
-#         paths:
-#           - path: /grafana
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: grafana
-#                 port:
-#                   number: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus-monitoring-ingress
+  namespace: monitoring
+  annotations:
+     kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: "prometheus.store.tbello.bio"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus
+                port:
+                  number: 9090
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana-monitoring-ingress
+  namespace: monitoring
+  annotations:
+     kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: "grafana.store.tbello.bio"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 3000
