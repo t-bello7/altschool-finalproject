@@ -25,3 +25,4 @@ Add the AWS_REGION, AWS_SECRET_ACCESS_KEY, AWS_ACCESS_KEY, AWS_STATE_BUCKET_NAME
 
 ## RESOURCES
 - https://github.com/docker/build-push-action/issues/223
+- https://www.aviator.co/blog/how-to-monitor-and-alert-on-nginx-ingress-in-kubernetes/s
