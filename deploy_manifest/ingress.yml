@@ -5,7 +5,7 @@ metadata:
   name: hipster-ingress
   namespace: hipster-shop
   annotations:
-    kubernetes.io/ingress.className: "nginx"
+    # kubernetes.io/ingress.className: "nginx"
     # Core Ingress Settings  
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
@@ -13,7 +13,7 @@ metadata:
     ## SSL Settings
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
 spec:
-  ingressClassName: nginx
+  # ingressClassName: nginx
   rules:
     - host: store.tbello.bio
       http:
@@ -24,7 +24,7 @@ spec:
               service:
                 name: frontend-service
                 port:
-                  number: 8080
+                  number: 80
 # ---
 # apiVersion: networking.k8s.io/v1
 # kind: Ingress
