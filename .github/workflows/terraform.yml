@@ -74,8 +74,8 @@ jobs:
           aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo update
-            helm upgrade -i kube-prometheus-stack prometheus-community/kube-prometheus-stack \
-            --namespace monitoring --create-namespace
+          helm upgrade -i kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+          --namespace monitoring --create-namespace --timeout 10m30s
 
       - name: Install Ngnix Controller
         run: |
@@ -86,10 +86,8 @@ jobs:
           helm upgrade -i ingress-nginx ingress-nginx \
             --repo https://kubernetes.github.io/ingress-nginx \
             --namespace ingress-nginx --create-namespace \
-            --set controller.metrics.enabled=true
+            --set controller.metrics.enabled=true --timeout 10m30s
           kubectl get services -n ingress-nginx
-
-
 
       - name: Deploy Monitoring Yaml
         run: |
