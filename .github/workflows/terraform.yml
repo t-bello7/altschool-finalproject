@@ -104,7 +104,9 @@ jobs:
           aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
           kubectl apply -f hipster_shop_deploy.yml
           kubectl apply -f ingress.yml
-          kubectl apply -f cert_issue.yaml
+          
+        
+        # kubectl apply -f cert_issue.yaml
 
          # - name: Terraform Destroy
       #   run: |
