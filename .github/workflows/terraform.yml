@@ -41,13 +41,17 @@ jobs:
           terraform fmt  
           echo " Running Terraform Validate"
           terraform validate
-      - name: Terraform plan
-        run: | 
-          echo "Running Terraform Plan"
-          terraform plan -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
-      - name: Terraform Apply
+      - name: Terraform Destroy
         run: |
-          terraform apply -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
+          terraform destroy -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
+        
+      # - name: Terraform plan
+      #   run: | 
+      #     echo "Running Terraform Plan"
+      #     terraform plan -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
+      # - name: Terraform Apply
+      #   run: |
+      #     terraform apply -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
   eks_setup:
     needs: terraform_validation
     runs-on: ubuntu-latest
@@ -67,13 +71,13 @@ jobs:
       #     ./get_helm.sh
       #     helm repo add grafana https://grafana.github.io/helm-charts
       #     helm repo add stable https://charts.helm.sh/stable
-      - name: Install Kube-prometheus-stack
-        run: |
-          aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-          helm repo update
-          helm upgrade --force -i kube-prometheus-stack prometheus-community/kube-prometheus-stack \
-          --namespace monitoring --create-namespace --timeout 20m30s 
+      # - name: Install Kube-prometheus-stack
+      #   run: |
+      #      ${{ env.AWS_REGION }}
+      #     helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+      #     helm repo update
+      #     helm upgrade --force -i kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+      #     --namespace monitoring --create-namespace --timeout 20m30s 
       # - name: Install Cert Manager
       #   run: |
       #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
@@ -82,36 +86,33 @@ jobs:
       #       --namespace cert-manager --create-namespace \
       #       --version v1.11.0 \
       #       --set installCRDs=true --timeout 20m30s
-      - name: Install Ngnix Controller
-        run: |
-          aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-          helm repo add nginx-stable https://helm.nginx.com/stable
-          helm repo update
-          helm upgrade --force -i ingress-nginx ingress-nginx \
-            --repo https://kubernetes.github.io/ingress-nginx \
-            --namespace ingress-nginx --create-namespace \
-            --set controller.metrics.enabled=true --timeout 20m30s
-          kubectl get services -n ingress-nginx
-      - name: Deploy Monitoring Yaml
-        run: |
-          output=$(terraform output cluster_name)
-          aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-          kubectl apply -f monitoring_manifest       
-      - name: Deploy Hipster Shop 
-        working-directory: ./deploy_manifest
-        run: |
-          output=$(terraform output cluster_name)
-          aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-          kubectl apply -f hipster_shop_deploy.yml
-          kubectl apply -f ingress.yml
+      # - name: Install Ngnix Controller
+      #   run: |
+      #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+      #     helm repo add nginx-stable https://helm.nginx.com/stable
+      #     helm repo update
+      #     helm upgrade --force -i ingress-nginx ingress-nginx \
+      #       --repo https://kubernetes.github.io/ingress-nginx \
+      #       --namespace ingress-nginx --create-namespace \
+      #       --set controller.metrics.enabled=true --timeout 20m30s
+      #     kubectl get services -n ingress-nginx
+      # - name: Deploy Monitoring Yaml
+      #   run: |
+      #     output=$(terraform output cluster_name)
+      #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+      #     kubectl apply -f monitoring_manifest       
+      # - name: Deploy Hipster Shop 
+      #   working-directory: ./deploy_manifest
+      #   run: |
+      #     output=$(terraform output cluster_name)
+      #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+      #     kubectl apply -f hipster_shop_deploy.yml
+      #     kubectl apply -f ingress.yml
           
         
         # kubectl apply -f cert_issue.yaml
 
-         # - name: Terraform Destroy
-      #   run: |
-      #      terraform destroy -auto-approve -var 'aws_secret_key=${{env.AWS_SECRET_ACCESS_KEY}}' -var 'aws_access_key=${{env.AWS_ACCESS_KEY}}'
-        
+
               # - name: DELETE Monitoring and hipster namespace
       #   run: |
       #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
