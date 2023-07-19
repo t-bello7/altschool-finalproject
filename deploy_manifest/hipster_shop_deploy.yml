@@ -621,6 +621,7 @@ spec:
   selector:
     matchLabels:
       app: currencyservice
+  replicas: 3
   template:
     metadata:
       labels:
@@ -688,6 +689,7 @@ spec:
   selector:
     matchLabels:
       app: shippingservice
+  replicas: 3
   template:
     metadata:
       labels:
@@ -754,6 +756,7 @@ spec:
   selector:
     matchLabels:
       app: redis-cart
+  replicas: 3
   template:
     metadata:
       labels:
@@ -821,6 +824,7 @@ spec:
   selector:
     matchLabels:
       app: adservice
+  replicas: 3
   template:
     metadata:
       labels:

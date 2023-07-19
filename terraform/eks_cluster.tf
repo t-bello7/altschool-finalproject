@@ -17,7 +17,7 @@ module "eks" {
     one = {
       name = "node-group"
 
-      instance_types = ["t3.small"]
+      instance_types = ["t3.medium"]
 
       min_size = 2
       max_size = 4
