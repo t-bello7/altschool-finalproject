@@ -63,7 +63,14 @@ jobs:
         with:
           aws-access-key-id: ${{ env.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }} 
+          aws-region: ${{ env.AWS_REGION }}
+      # - name: DELETE Monitoring and hipster namespace
+      #   run: |
+      #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
+      #     kubectl delete namespace monitoring
+      #     kubectl delete namespace hipster-shop
+      #     kubectl delete namespace ingress-nginx
+
       # - name: Install helm
       #   run: |
       #     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
@@ -113,11 +120,3 @@ jobs:
         # kubectl apply -f cert_issue.yaml
 
 
-              # - name: DELETE Monitoring and hipster namespace
-      #   run: |
-      #     aws eks update-kubeconfig --name group-17-eks --region ${{ env.AWS_REGION }}
-      #     kubectl delete namespace monitoring
-      #     kubectl delete namespace hipster-shop
-      #     kubectl delete namespace ingress-nginx
-        #     - name: Use Terraform output in github
-        # run: echo $(terraform output cluster_name)    
