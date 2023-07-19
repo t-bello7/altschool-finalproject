@@ -6,11 +6,10 @@ metadata:
   namespace: hipster-shop
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
-  # ingressClassName: nginx
   rules:
-    - host: store.tbello.bio
+    - host: fbayomide.studio
       http:
         paths:
           - path: /
@@ -20,10 +19,6 @@ spec:
                 name: frontend-service
                 port:
                   number: 80
-  tls:
-    - hosts:
-        - store.tbello.bio
-        secretName: tls-store.kibana
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -34,7 +29,7 @@ metadata:
      kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-    - host: "prometheus.store.tbello.bio"
+    - host: "prometheus.fbayomide.studio"
       http:
         paths:
           - path: /
@@ -54,7 +49,7 @@ metadata:
      kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-    - host: "grafana.store.tbello.bio"
+    - host: "grafana.fbayomide.studio"
       http:
         paths:
           - path: /
