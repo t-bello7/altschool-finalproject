@@ -1,5 +1,7 @@
-### Hipster Shop
+[screencast.webm](https://github.com/t-bello7/altschool-finalproject/assets/24270269/5efac60b-f3dd-47c5-854b-7f4e833ad400)### Hipster Shop
 The [Hipster Shop](https://github.com/GoogleCloudPlatform/microservices-demo) is a microservices-based e-commerce solution that aims to address the challenges faced by modern online retailers, aim at improving customers experience. <br>The application can either be deployed locally or remotely.Steps taken for deployment of this application have been listed below.
+
+[screencas](https://github.com/t-bello7/altschool-finalproject/assets/24270269/3e2cf566-82ad-47f5-bc7f-6ae48921651b)
 
 ### Pre-requisites
 - An AWS account
