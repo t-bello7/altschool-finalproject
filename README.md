@@ -1,5 +1,6 @@
 ### Hipster Shop
-The [Hipster Shop](https://github.com/GoogleCloudPlatform/microservices-demo) is a microservices-based e-commerce solution that aims to address the challenges faced by modern online retailers, aim at improving customers experience. <br>The application can either be deployed locally or remotely.Steps taken for deployment of this application have been listed below. 
+The [Hipster Shop](https://github.com/GoogleCloudPlatform/microservices-demo) is a microservices-based e-commerce solution that aims to address the challenges faced by modern online retailers, aim at improving customers experience. <br>The application can either be deployed locally or remotely.Steps taken for deployment of this application have been listed below.
+
 ### Pre-requisites
 - An AWS account
 - A GitHub account
@@ -7,6 +8,7 @@ The [Hipster Shop](https://github.com/GoogleCloudPlatform/microservices-demo) is
 - Install AWS CLI
 
 ### For Local deployment: 
+
 ### Setup credentials 
 You will need to set up your credentials as it is very important for deployment. The deployment of this application was done using AWS, other cloud providers can be used based on your field of expertise.
 
